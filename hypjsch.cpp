@@ -128,14 +128,18 @@ int main(int argc, char *argv[]) {
             if (event.jaxis.axis > 0x63) { // 3 digit input codes
                index = index * offset;
                snprintf (axis, sizeof(axis), "Axis:%04i %i", event.jaxis.axis + 1 + index, event.jaxis.value);
-               if (event.jaxis.value < 0) snprintf (example, sizeof(example), "%s -%04i", ega, event.jaxis.axis + 1 + index);
-               else snprintf (example, sizeof(example), "%s +%04i", ega, event.jaxis.axis + 1 + index);
+               if (abs(event.jaxis.value) > 0x7400) {
+                  if (event.jaxis.value < 0) snprintf (example, sizeof(example), "%s -%04i", ega, event.jaxis.axis + 1 + index);
+                  else snprintf (example, sizeof(example), "%s +%04i", ega, event.jaxis.axis + 1 + index);
+               }
             }
             else
             {
                snprintf (axis, sizeof(axis), "Axis:%03i %i", event.jaxis.axis + 1 + index, event.jaxis.value);
-               if (event.jaxis.value < 0) snprintf (example, sizeof(example), "%s -%03i", ega, event.jaxis.axis + 1 + index);
-               else snprintf (example, sizeof(example), "%s +%03i", ega, event.jaxis.axis + 1 + index);
+               if (abs(event.jaxis.value) > 0x7400) {
+                  if (event.jaxis.value < 0) snprintf (example, sizeof(example), "%s -%03i", ega, event.jaxis.axis + 1 + index);
+                  else snprintf (example, sizeof(example), "%s +%03i", ega, event.jaxis.axis + 1 + index);
+               }
             }
 
             SDLTest_DrawString(renderer, pos(size, axis), ln, axis);
@@ -181,6 +185,7 @@ int main(int argc, char *argv[]) {
 
        SDLTest_DrawString(renderer, pos(size, example), 0x78, example);
        SDLTest_DrawString(renderer, 0xe1, 0x96, "ESC to quit");
+       SDLTest_DrawString(renderer, 0x06, 0x96, VERSION);
        SDL_RenderPresent(renderer);
     }
 

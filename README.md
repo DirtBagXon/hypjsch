@@ -1,10 +1,16 @@
-![Hypseus Singe](https://raw.githubusercontent.com/DirtBagXon/hypseus-singe/master/screenshots/hypseus-logo.png)
+![Hypseus Singe](https://raw.githubusercontent.com/DirtBagXon/hypseus-singe/master/screenshots/hypseus-minilogo.png)
 
 # Hypseus Joystick Configuration Helper
 
 This utility will perform the SDL joystick *axis/button* conversion to use in the `hypinput.ini` file of [Hypseus Singe](https://github.com/DirtBagXon/hypseus-singe).
 
 It will provide configuration details when multiple joysticks are detected.
+
+--- 
+This utility will provide adjusted config values automatically.  
+You do **not** need to perform the `+1` addition to *button/axis* values, as described in the example config.
+
+--- 
 
 Connect your *joystick(s)*, run the utility, see configuration examples based on joystick actions.
 

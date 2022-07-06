@@ -14,7 +14,7 @@ all:	$(GUI) $(CLI)
 clean:
 	$(RM) $(GUI) $(CLI)
 
-$(GUI): hypjsch.cpp
+$(GUI): hypjsch.cpp keycodes.cpp
 	${CPP} ${CFLAGS} keycodes.cpp hypjsch.cpp ${LIBS} ${TESTLIBS} -o ${GUI}
 
 $(CLI): hypjsch_cli.cpp

@@ -25,6 +25,7 @@
 
 #include <SDL2/SDL.h>
 #include <cinttypes>
+#include "keycodes.h"
 
 int main(int argc, char *argv[]) {
 
@@ -70,22 +71,24 @@ int main(int argc, char *argv[]) {
 
           if (event.type == SDL_JOYAXISMOTION && event.jaxis.which == i) {
 
-             if (event.jaxis.axis > 0x63) { // 3 digit input codes
-                index = index * 0x64;
-                fprintf (stdout, "%s:%c", j, t);
-                fprintf (stdout, "Axis: %04i%c- ", event.jaxis.axis + 1 + index, t);
-                if (event.jaxis.value < 0) fprintf (stdout, "%s -%04i%c", ega, event.jaxis.axis + 1 + index, n);
-                else fprintf (stdout, "%s +%04i%c", ega, event.jaxis.axis + 1 + index, n);
-             }
-             else
-             {
-                fprintf (stdout, "%s:%c", j, t);
-                fprintf (stdout, "Axis: %03i%c- ", event.jaxis.axis + 1 + index, t);
-                if (event.jaxis.value < 0) fprintf (stdout, "%s -%03i%c", ega, event.jaxis.axis + 1 + index, n);
-                else fprintf (stdout, "%s +%03i%c", ega, event.jaxis.axis + 1 + index, n);
+             if (abs(event.jaxis.value) > 0x7400) {
+                if (event.jaxis.axis > 0x63) { // 3 digit input codes
+                   index = index * 0x64;
+                   fprintf (stdout, "%s:%c", j, t);
+                   fprintf (stdout, "Axis: %04i%c- ", event.jaxis.axis + 1 + index, t);
+                   if (event.jaxis.value < 0) fprintf (stdout, "%s -%04i%c", ega, event.jaxis.axis + 1 + index, n);
+                   else fprintf (stdout, "%s +%04i%c", ega, event.jaxis.axis + 1 + index, n);
+                }
+                else
+                {
+                   fprintf (stdout, "%s:%c", j, t);
+                   fprintf (stdout, "Axis: %03i%c- ", event.jaxis.axis + 1 + index, t);
+                   if (event.jaxis.value < 0) fprintf (stdout, "%s -%03i%c", ega, event.jaxis.axis + 1 + index, n);
+                   else fprintf (stdout, "%s +%03i%c", ega, event.jaxis.axis + 1 + index, n);
+                }
              }
 
-           } else if (event.type == SDL_JOYBUTTONDOWN && event.jbutton.which == i) {
+          } else if (event.type == SDL_JOYBUTTONDOWN && event.jbutton.which == i) {
 
              if (event.jbutton.button > 0x63) { // 3 digit input codes
                 index = index * 0x64;
@@ -103,7 +106,8 @@ int main(int argc, char *argv[]) {
        }
     }
 
-    fprintf(stdout, "%c%s%c%c", n, e, n, n);
+    fprintf(stdout, "%c%s", n, e);
+    fprintf(stdout, " - %s%c%c", VERSION, n, n);
     SDL_JoystickClose(joystick);
     SDL_Quit();
     return 0;

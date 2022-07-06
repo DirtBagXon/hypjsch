@@ -20,6 +20,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#define VERSION "v1.1"
+
 #ifndef keycodes_h
 #define keycodes_h
 

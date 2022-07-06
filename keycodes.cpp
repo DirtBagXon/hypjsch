@@ -31,9 +31,12 @@ const char* sdl2_key(int key)
 	else if (key == SDLK_RETURN) return "SDLK_RETURN";
 	else if (key == SDLK_ESCAPE) return "SDLK_ESCAPE";
 	else if (key == SDLK_SPACE) return "SDLK_SPACE";
+	else if (key == SDLK_HASH) return "SDLK_HASH";
+	else if (key == SDLK_QUOTE) return "SDLK_QUOTE";
 	else if (key == SDLK_COMMA) return "SDLK_COMMA";
 	else if (key == SDLK_MINUS) return "SDLK_MINUS";
 	else if (key == SDLK_PERIOD) return "SDLK_PERIOD";
+	else if (key == SDLK_APPLICATION) return "SDLK_APPLICATION";
 	else if (key == SDLK_SLASH) return "SDLK_SLASH";
 	else if (key == SDLK_0) return "SDLK_0";
 	else if (key == SDLK_1) return "SDLK_1";
@@ -45,7 +48,10 @@ const char* sdl2_key(int key)
 	else if (key == SDLK_7) return "SDLK_7";
 	else if (key == SDLK_8) return "SDLK_8";
 	else if (key == SDLK_9) return "SDLK_9";
+	else if (key == SDLK_SEMICOLON) return "SDLK_SEMICOLON";
 	else if (key == SDLK_EQUALS) return "SDLK_EQUALS";
+	else if (key == SDLK_LEFTBRACKET) return "SDLK_LEFTBRACKET";
+	else if (key == SDLK_RIGHTBRACKET) return "SDLK_RIGHTBRACKET";
 	else if (key == SDLK_BACKSLASH) return "SDLK_BACKSLASH";
 	else if (key == SDLK_BACKQUOTE) return "SDLK_BACKQUOTE";
 	else if (key == SDLK_a) return "SDLK_a";
@@ -74,6 +80,7 @@ const char* sdl2_key(int key)
 	else if (key == SDLK_x) return "SDLK_x";
 	else if (key == SDLK_y) return "SDLK_y";
 	else if (key == SDLK_z) return "SDLK_z";
+	else if (key == SDLK_CAPSLOCK) return "SDLK_CAPSLOCK";
 	else if (key == SDLK_DELETE) return "SDLK_DELETE";
 	else if (key == SDLK_F1) return "SDLK_F1";
 	else if (key == SDLK_F2) return "SDLK_F2";
@@ -87,12 +94,18 @@ const char* sdl2_key(int key)
 	else if (key == SDLK_F10) return "SDLK_F10";
 	else if (key == SDLK_F11) return "SDLK_F11";
 	else if (key == SDLK_F12) return "SDLK_F12";
+	else if (key == SDLK_SCROLLLOCK) return "SDLK_SCROLLLOCK";
+	else if (key == SDLK_PAUSE) return "SDLK_PAUSE";
+	else if (key == SDLK_INSERT) return "SDLK_INSERT";
+	else if (key == SDLK_HOME) return "SDLK_HOME";
 	else if (key == SDLK_PAGEUP) return "SDLK_PAGEUP";
+	else if (key == SDLK_END) return "SDLK_END";
 	else if (key == SDLK_PAGEDOWN) return "SDLK_PAGEDOWN";
 	else if (key == SDLK_RIGHT) return "SDLK_RIGHT";
 	else if (key == SDLK_LEFT) return "SDLK_LEFT";
 	else if (key == SDLK_DOWN) return "SDLK_DOWN";
 	else if (key == SDLK_UP) return "SDLK_UP";
+	else if (key == SDLK_NUMLOCKCLEAR) return "SDLK_NUMLOCKCLEAR";
 	else if (key == SDLK_KP_DIVIDE) return "SDLK_KP_DIVIDE";
 	else if (key == SDLK_KP_MULTIPLY) return "SDLK_KP_MULTIPLY";
 	else if (key == SDLK_KP_MINUS) return "SDLK_KP_MINUS";
@@ -119,6 +132,7 @@ const char* sdl2_key(int key)
 	else if (key == SDLK_RSHIFT) return "SDLK_RSHIFT";
 	else if (key == SDLK_RALT) return "SDLK_RALT";
 	else if (key == SDLK_RGUI) return "SDLK_RGUI";
+	else if (key == SDLK_MODE) return "SDLK_MODE";
 	else {
 		std::string s = std::to_string(key);
 		char const *pchar = s.c_str();
