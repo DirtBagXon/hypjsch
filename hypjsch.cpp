@@ -128,7 +128,7 @@ int main(int argc, char *argv[]) {
             if (event.jaxis.axis > 0x63) { // 3 digit input codes
                index = index * offset;
                snprintf (axis, sizeof(axis), "Axis:%04i %i", event.jaxis.axis + 1 + index, event.jaxis.value);
-               if (abs(event.jaxis.value) > 0x7400) {
+               if (abs(event.jaxis.value) > JITTER) {
                   if (event.jaxis.value < 0) snprintf (example, sizeof(example), "%s -%04i", ega, event.jaxis.axis + 1 + index);
                   else snprintf (example, sizeof(example), "%s +%04i", ega, event.jaxis.axis + 1 + index);
                }
@@ -136,7 +136,7 @@ int main(int argc, char *argv[]) {
             else
             {
                snprintf (axis, sizeof(axis), "Axis:%03i %i", event.jaxis.axis + 1 + index, event.jaxis.value);
-               if (abs(event.jaxis.value) > 0x7400) {
+               if (abs(event.jaxis.value) > JITTER) {
                   if (event.jaxis.value < 0) snprintf (example, sizeof(example), "%s -%03i", ega, event.jaxis.axis + 1 + index);
                   else snprintf (example, sizeof(example), "%s +%03i", ega, event.jaxis.axis + 1 + index);
                }

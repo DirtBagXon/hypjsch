@@ -135,7 +135,7 @@ const char* sdl2_key(int key)
 	else if (key == SDLK_MODE) return "SDLK_MODE";
 	else {
 		std::string s = std::to_string(key);
-		char const *pchar = s.c_str();
+		const char *pchar = s.c_str();
 		return pchar;
 	}
 }

@@ -21,6 +21,7 @@
  */
 
 #define VERSION "v1.1"
+#define JITTER   0x7400
 
 #ifndef keycodes_h
 #define keycodes_h

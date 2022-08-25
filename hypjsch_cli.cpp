@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
 
           if (event.type == SDL_JOYAXISMOTION && event.jaxis.which == i) {
 
-             if (abs(event.jaxis.value) > 0x7400) {
+             if (abs(event.jaxis.value) > JITTER) {
                 if (event.jaxis.axis > 0x63) { // 3 digit input codes
                    index = index * 0x64;
                    fprintf (stdout, "%s:%c", j, t);
