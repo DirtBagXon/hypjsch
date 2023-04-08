@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
     const char egb[30] = "KEY_QUIT = SDLK_ESCAPE 0";
     const char e[44] = "(Third column provides example config only)";
     int n = 0x0a, t = 0x09, len = 0x28;
-    char j[len] = {};
+    char j[40] = {0};
     int index = 0;
 
     if (SDL_NumJoysticks() == 0) {

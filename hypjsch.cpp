@@ -81,8 +81,8 @@ int main(int argc, char *argv[]) {
     const char egk[16] = "e.g. KEY_TEST =";
     int js = 0, kb = 0, index = 0;
     int ln = 0x4f, s = 0x28;
-    char example[s] = {};
-    char joy[s] = {};
+    char example[40] = {0};
+    char joy[40] = {0};
     char button[s];
     char axis[s];
     char hat[s];
