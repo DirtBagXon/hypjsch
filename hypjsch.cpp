@@ -36,7 +36,11 @@ int pos(int size, const char* word) {
      return ((size - (strlen(word)<<3))>>1);
 }
 
-int main(int argc, char *argv[]) {
+#ifdef WIN32
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+#else
+int main(int argc, char* argv[]) {
+#endif
 
     if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK) != 0) {
 #ifdef WIN32
