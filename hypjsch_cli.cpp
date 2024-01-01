@@ -35,11 +35,11 @@ int main(int argc, char *argv[]) {
     }
 
     SDL_Joystick *joystick;
-    const char ega[30] = "KEY_DOWN = SDLK_DOWN 0 0";
-    const char egb[30] = "KEY_QUIT = SDLK_ESCAPE 0";
-    const char e[44] = "(Third column provides example config only)";
-    int n = 0x0a, t = 0x09, len = 0x28;
-    char j[40] = {0};
+    const char ega[28] = "KEY_[AXIS] = SDLK_[DIR] 0 0";
+    const char egb[25] = "KEY_[ACT] = SDLK_[KEY] 0";
+    const char e[45] = "(Third column provides template config only)";
+    int n = 0x0a, t = 0x09, len = 0x31;
+    char j[50] = {0};
     int index = 0;
 
     if (SDL_NumJoysticks() == 0) {

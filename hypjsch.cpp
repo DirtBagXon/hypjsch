@@ -64,10 +64,10 @@ int main(int argc, char* argv[]) {
     Uint32 sdl_flags = 0;
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
-    int size = 0x140, offset = 0x64;
+    int size = 0x180, offset = 0x64;
     sdl_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP;
 
-    if (SDL_CreateWindowAndRenderer(size, size>>1, sdl_flags, &window, &renderer)) {
+    if (SDL_CreateWindowAndRenderer(size, 0xa6, sdl_flags, &window, &renderer)) {
 #ifdef WIN32
        MessageBox(NULL, SDL_GetError(), "Encountered an error", MB_OK | MB_ICONERROR);
 #else
@@ -77,20 +77,20 @@ int main(int argc, char* argv[]) {
        exit(1);
     }
 
-    SDL_SetWindowTitle(window, "Hypseus Config Value Calc");
+    SDL_SetWindowTitle(window, "Hypseus Config Value Calculator");
     SDL_Joystick *joystick;
 
-    const char ega[30] = "e.g. KEY_DOWN = SDLK_DOWN 0 0";
-    const char egb[30] = "e.g. KEY_QUIT = SDLK_ESCAPE 0";
-    const char egk[16] = "e.g. KEY_TEST =";
+    const char ega[28] = "KEY_[AXIS] = SDLK_[DIR] 0 0";
+    const char egb[25] = "KEY_[ACT] = SDLK_[KEY] 0";
+    const char egk[12] = "KEY_[ACT] =";
     int js = 0, kb = 0, index = 0;
-    int ln = 0x4f, s = 0x28;
-    char example[40] = {0};
-    char joy[40] = {0};
-    char button[s];
-    char axis[s];
-    char hat[s];
-    char key[s];
+    int ln = 0x4f, s = 0x31;
+    char example[50] = {0};
+    char joy[50] = {0};
+    char button[50];
+    char axis[50];
+    char hat[50];
+    char key[50];
 
     SDL_Event event;
     while (1) {
@@ -188,8 +188,8 @@ int main(int argc, char* argv[]) {
        }
 
        SDLTest_DrawString(renderer, pos(size, example), 0x78, example);
-       SDLTest_DrawString(renderer, 0xe1, 0x96, "ESC to quit");
-       SDLTest_DrawString(renderer, 0x06, 0x96, VERSION);
+       SDLTest_DrawString(renderer, 0x122, 0x9a, "ESC to quit");
+       SDLTest_DrawString(renderer, 0x006, 0x9a, VERSION);
        SDL_RenderPresent(renderer);
     }
 

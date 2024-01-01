@@ -20,7 +20,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#define VERSION "v1.1"
+#define VERSION "v1.2"
 #define JITTER   0x7400
 
 #ifndef keycodes_h
