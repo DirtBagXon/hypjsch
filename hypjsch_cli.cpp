@@ -88,6 +88,11 @@ int main(int argc, char *argv[]) {
                 }
              }
 
+          } else if (event.type == SDL_JOYHATMOTION && event.jhat.hat == i) {
+
+                fprintf (stdout, "%s:%c", j, t);
+                fprintf (stdout, "HAT - Set KEY_UP Button to: %03d%c", event.jhat.which * 100, n);
+
           } else if (event.type == SDL_JOYBUTTONDOWN && event.jbutton.which == i) {
 
              if (event.jbutton.button > 0x63) { // 3 digit input codes

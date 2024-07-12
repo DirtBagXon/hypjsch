@@ -171,8 +171,8 @@ int main(int argc, char* argv[]) {
             js = event.jhat.which;
             kb = 0;
 
-            snprintf (hat, sizeof(hat), "HAT: %s", sdl2_hat(event.jhat.value));
-            example[0] = '\0';
+            snprintf (hat, sizeof(hat), "HAT:%03d %s", js * 100, sdl2_hat(event.jhat.value));
+            snprintf (example, sizeof(example), "KEY_UP Button: %03d", js * 100);
 
             SDLTest_DrawString(renderer, pos(size, hat), ln, hat);
 
