@@ -6,6 +6,11 @@ This utility will perform the SDL joystick *axis/button* conversion to use in th
 
 It will provide configuration details when multiple joysticks are detected.
 
+#### Important Note
+
+This utility will only help calculate **Joystick API** configurations in _Hypseus_.  
+It will **not** help if you are using a _GamePad_ and the **Game Controller** API via `-gamepad`
+
 --- 
 This utility will provide adjusted config values automatically.  
 You do **not** need to perform the `+1` addition to *button/axis* values, as described in the example config.
