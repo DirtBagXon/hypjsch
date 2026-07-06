@@ -15,7 +15,6 @@ It will **not** help if you are using a _GamePad_ and the **Game Controller** AP
 
 --- 
 This utility will provide adjusted config values automatically.  
-You do **not** need to perform the `+1` addition to *button/axis* values, as described in the example config.
 
 --- 
 
@@ -42,8 +41,8 @@ On remote sessions (*via ssh*), use the *cli* version `hypjsch_cli`:
     2 joystick(s) found
 
     Xbox One Controller:         Button: 101     - KEY_[ACT] = 101
-    Xbox One Controller:         Axis: 103       - KEY_[AXIS] +104
-    Xbox One Controller:         Axis: 101       - KEY_[AXIS] +102
+    Xbox One Controller:         Axis: 104       - KEY_[AXIS] +104
+    Xbox One Controller:         Axis: 102       - KEY_[AXIS] +102
     Xbox One Controller:         HAT - Set KEY_UP Button to: 100
 
 ![GNU General Public License version 3](http://www.gnu.org/graphics/gplv3-127x51.png)

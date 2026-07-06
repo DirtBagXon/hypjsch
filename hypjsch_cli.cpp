@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
                 int code = encode(i, event.jaxis.axis);
 
                 printf("%s:\t", joy_name(sticks[i], i));
-                printf("Axis: %03d\t- ", code);
+                printf("Axis: %03d\t- ", code + 1);
 
                 if (event.jaxis.value < 0)
                     printf("%s -%03d\n", "KEY_[AXIS]", code + 1);
