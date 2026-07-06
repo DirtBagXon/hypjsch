@@ -196,7 +196,11 @@ int main(int argc, char* argv[])
 
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK))
     {
+#ifdef WIN32
+       MessageBox(NULL,"Unable to initialize SDL", "Encountered an error", MB_OK | MB_ICONERROR);
+#else
         SDL_Log("SDL init failed: %s", SDL_GetError());
+#endif
         return 1;
     }
 
@@ -205,7 +209,11 @@ int main(int argc, char* argv[])
 
     if (!ids || count <= 0)
     {
-        SDL_Log("No joysticks found");
+#ifdef WIN32
+       MessageBox(NULL,"No joysticks found", "Encountered an error", MB_OK | MB_ICONERROR);
+#else
+       SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "No joysticks found", NULL);
+#endif
         SDL_free(ids);
         SDL_Quit();
         return 1;
@@ -220,7 +228,11 @@ int main(int argc, char* argv[])
             SDL_WINDOW_ALWAYS_ON_TOP,
             &window, &renderer))
     {
-        SDL_Log("Window error: %s", SDL_GetError());
+#ifdef WIN32
+       MessageBox(NULL, SDL_GetError(), "Encountered an error", MB_OK | MB_ICONERROR);
+#else
+       SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", SDL_GetError(), NULL);
+#endif
         SDL_free(ids);
         SDL_Quit();
         return 1;
