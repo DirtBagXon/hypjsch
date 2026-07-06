@@ -2,9 +2,11 @@
 
 # Hypseus Joystick Configuration Helper
 
-This utility will perform the SDL joystick *axis/button* conversion to use in the `hypinput.ini` file of [Hypseus Singe](https://github.com/DirtBagXon/hypseus-singe).
+This utility will perform the SDL joystick *axis/button* conversion to use in the `hypinput.ini` file.
 
 It will provide configuration details when multiple joysticks are detected.
+
+This tool is now _SDL3_ based.
 
 #### Important Note
 
@@ -21,7 +23,7 @@ Connect your *joystick(s)*, run the utility, see configuration examples based on
 
 Windows binaries are provided in `Releases`.
 
-Create alternate configurations for use with the `-keymapfile` [argument](https://github.com/DirtBagXon/hypseus-singe#extended-arguments-and-keys).
+Create alternate configurations for use with the `-keymapfile` [argument](https://github.com/DirtBagXon/hypseus-singe/blob/master/doc/CmdLine.md).
 
 
 Compile from source using `make`, this will produce:
@@ -38,13 +40,11 @@ Compile from source using `make`, this will produce:
 On remote sessions (*via ssh*), use the *cli* version `hypjsch_cli`:
 
     2 joystick(s) found
-    Microsoft X-Box 360 pad:        Button: 001     - KEY_QUIT = SDLK_ESCAPE 0 001
-    Microsoft X-Box 360 pad:        Axis: 001       - KEY_DOWN = SDLK_DOWN 0 0 -001
-    Microsoft X-Box 360 pad:        Axis: 002       - KEY_DOWN = SDLK_DOWN 0 0 +002
-    DragonRise Inc. Generic:        Button: 106     - KEY_QUIT = SDLK_ESCAPE 0 106
-    DragonRise Inc. Generic:        Axis: 103       - KEY_DOWN = SDLK_DOWN 0 0 +103
-    DragonRise Inc. Generic:        Axis: 104       - KEY_DOWN = SDLK_DOWN 0 0 -104
 
+    Xbox One Controller:         Button: 101     - KEY_[ACT] = 101
+    Xbox One Controller:         Axis: 103       - KEY_[AXIS] +104
+    Xbox One Controller:         Axis: 101       - KEY_[AXIS] +102
+    Xbox One Controller:         HAT - Set KEY_UP Button to: 100
 
 ![GNU General Public License version 3](http://www.gnu.org/graphics/gplv3-127x51.png)
 

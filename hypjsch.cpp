@@ -19,183 +19,258 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * g++ keycodes.cpp hypjsch.cpp -lSDL2 -lSDL2_test -o hypjsch
+ * g++ keycodes.cpp hypjsch.cpp -lSDL3_test -lSDL3 -o hypjsch
  *
  */
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_test_font.h>
-#include <cinttypes>
+
+#include <SDL3/SDL.h>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+
 #include "keycodes.h"
 
 #ifdef WIN32
 #include <windows.h>
 #endif
 
-int pos(int size, const char* word) {
-     return ((size - (strlen(word)<<3))>>1);
+struct SlotMapping
+{
+    int count = 0;
+    SDL_JoystickID* ids = nullptr;
+    SDL_Joystick** sticks = nullptr;
+
+    int active_js = -1;
+    int keyboard_mode = 0;
+
+    char line[128] = {0};
+    char output[128] = {0};
+
+    Uint32 last_update = 0;
+};
+
+static int center_x(int screen_w, const char* text)
+{
+    return (screen_w - ((int)strlen(text) * 8)) / 2;
+}
+
+static int encode(int js_index, int control_id)
+{
+    return (js_index * 100) + control_id;
+}
+
+static int js_index(SDL_JoystickID id, SDL_JoystickID* ids, int count)
+{
+    for (int i = 0; i < count; i++)
+        if (ids[i] == id)
+            return i;
+    return -1;
+}
+
+static void render_mapper(SDL_Renderer* r, SlotMapping& st,
+                          int screen_w, const char* version,
+                          SDL_Event& event)
+{
+    const char* title = "KEYBOARD DEVICE";
+
+    if (event.type == SDL_EVENT_JOYSTICK_AXIS_MOTION)
+    {
+        int i = js_index(event.jaxis.which, st.ids, st.count);
+        if (i >= 0)
+        {
+            st.active_js = i;
+            st.last_update = SDL_GetTicks();
+
+            if (abs(event.jaxis.value) > JITTER) {
+
+                st.keyboard_mode = 0;
+                int code = encode(i, event.jaxis.axis);
+
+                snprintf(st.line, sizeof(st.line),
+                         "Raw Device %d Axis %d = %d",
+                         event.jaxis.which,
+                         event.jaxis.axis,
+                         event.jaxis.value);
+
+                snprintf(st.output, sizeof(st.output),
+                         "Config: KEY_[AXIS] = %s%03d",
+                         (event.jaxis.value < 0 ? "-" : "+"),
+                         code + 1);
+            }
+        }
+    }
+    else if (event.type == SDL_EVENT_JOYSTICK_BUTTON_DOWN)
+    {
+        int i = js_index(event.jbutton.which, st.ids, st.count);
+        if (i >= 0)
+        {
+            st.active_js = i;
+            st.keyboard_mode = 0;
+
+            int code = encode(i, event.jbutton.button);
+
+            snprintf(st.line, sizeof(st.line),
+                     "Raw Device %d Button: %d",
+                     event.jbutton.which,
+                     event.jbutton.button);
+
+            snprintf(st.output, sizeof(st.output),
+                     "Config: KEY_[ACT] = %03d",
+                     code + 1);
+        }
+    }
+    else if (event.type == SDL_EVENT_JOYSTICK_HAT_MOTION)
+    {
+        int i = js_index(event.jhat.which, st.ids, st.count);
+        if (i >= 0)
+        {
+            st.active_js = i;
+            st.keyboard_mode = 0;
+
+            int code = encode(i, event.jhat.hat);
+
+            snprintf(st.line, sizeof(st.line),
+                     "Raw Device %d Hat %d: %s",
+                     event.jhat.which,
+                     event.jhat.hat,
+                     sdl3_hat(event.jhat.value));
+
+            snprintf(st.output, sizeof(st.output),
+                     "Config: KEY_UP Button: %03d",
+                     code);
+        }
+    }
+    else if (event.type == SDL_EVENT_KEY_DOWN ||
+             event.type == SDL_EVENT_KEY_UP)
+    {
+        st.keyboard_mode = 1;
+
+        snprintf(st.line, sizeof(st.line),
+                 "Scancode: %s",
+                 SDL_GetKeyName(event.key.key));
+
+        snprintf(st.output, sizeof(st.output),
+                 "Config: KEY_[ACT] = %s 0 0",
+                 sdl3_key(event.key.key));
+    }
+
+    if (!st.keyboard_mode && st.active_js >= 0 && st.sticks)
+    {
+        const char* name = SDL_GetJoystickName(st.sticks[st.active_js]);
+        if (name) title = name;
+    }
+
+    SDL_SetRenderDrawColor(r, 0xB8, 0x02, 0x02, 0xFF);
+    SDL_RenderClear(r);
+
+    SDL_SetRenderDrawColor(r, 0xFF, 0xFF, 0xFF, 0xFF);
+
+    SDL_RenderDebugText(r, center_x(screen_w, title), 40, title);
+    SDL_RenderDebugText(r, center_x(screen_w, st.line), 70, st.line);
+    SDL_RenderDebugText(r, center_x(screen_w, st.output), 100, st.output);
+
+    SDL_RenderDebugText(r, 8, 150, "(SDL3)");
+    SDL_RenderDebugText(r, 64, 150, version);
+    SDL_RenderDebugText(r, 290, 150, "ESC to quit");
+
+    SDL_RenderPresent(r);
 }
 
 #ifdef WIN32
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+int WINAPI WinMain(HINSTANCE hInstance,
+                   HINSTANCE hPrevInstance,
+                   LPSTR lpCmdLine,
+                   int nCmdShow)
+{
+    (void)hInstance;
+    (void)hPrevInstance;
+    (void)lpCmdLine;
+    (void)nCmdShow;
 #else
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
+    (void)argc;
+    (void)argv;
 #endif
 
-    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK) != 0) {
-#ifdef WIN32
-       MessageBox(NULL,"Unable to initialize SDL", "Encountered an error", MB_OK | MB_ICONERROR);
-#else
-       SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-#endif
-       exit(1);
+    if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK))
+    {
+        SDL_Log("SDL init failed: %s", SDL_GetError());
+        return 1;
     }
 
-    if (SDL_NumJoysticks() == 0) {
-#ifdef WIN32
-       MessageBox(NULL,"No joysticks found", "Encountered an error", MB_OK | MB_ICONERROR);
-#else
-       SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "No joysticks found", NULL);
-#endif
-       SDL_Quit();
-       exit(1);
+    int count = 0;
+    SDL_JoystickID* ids = SDL_GetJoysticks(&count);
+
+    if (!ids || count <= 0)
+    {
+        SDL_Log("No joysticks found");
+        SDL_free(ids);
+        SDL_Quit();
+        return 1;
     }
 
-    Uint32 sdl_flags = 0;
-    SDL_Window *window = NULL;
-    SDL_Renderer *renderer = NULL;
-    int size = 0x180, offset = 0x64;
-    sdl_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_ALWAYS_ON_TOP;
+    SDL_Window* window = nullptr;
+    SDL_Renderer* renderer = nullptr;
 
-    if (SDL_CreateWindowAndRenderer(size, 0xa6, sdl_flags, &window, &renderer)) {
-#ifdef WIN32
-       MessageBox(NULL, SDL_GetError(), "Encountered an error", MB_OK | MB_ICONERROR);
-#else
-       SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", SDL_GetError(), NULL);
-#endif
-       SDL_Quit();
-       exit(1);
+    if (!SDL_CreateWindowAndRenderer(
+            "Hypseus SDL3 Joystick API Calculator",
+            0x180, 0xA6,
+            SDL_WINDOW_ALWAYS_ON_TOP,
+            &window, &renderer))
+    {
+        SDL_Log("Window error: %s", SDL_GetError());
+        SDL_free(ids);
+        SDL_Quit();
+        return 1;
     }
 
-    SDL_SetWindowTitle(window, "Hypseus Config Value Calculator");
-    SDL_Joystick *joystick;
+    SDL_Joystick** sticks =
+        (SDL_Joystick**)SDL_calloc(count, sizeof(SDL_Joystick*));
 
-    const char ega[28] = "KEY_[AXIS] = SDLK_[DIR] 0 0";
-    const char egb[25] = "KEY_[ACT] = SDLK_[KEY] 0";
-    const char egk[12] = "KEY_[ACT] =";
-    int js = 0, kb = 0, index = 0;
-    int ln = 0x4f, s = 0x31;
-    char example[50] = {0};
-    char joy[50] = {0};
-    char button[50];
-    char axis[50];
-    char hat[50];
-    char key[50];
+    for (int i = 0; i < count; i++)
+        sticks[i] = SDL_OpenJoystick(ids[i]);
+
+    SlotMapping st;
+    st.count = count;
+    st.ids = ids;
+    st.sticks = sticks;
 
     SDL_Event event;
-    while (1) {
 
-        if (SDL_NumJoysticks() == 0) break;
+    const int SCREEN_W = 0x180;
 
-        SDL_SetRenderDrawColor(renderer, 0xb8, 0x2, 0x2, SDL_ALPHA_OPAQUE);
-        SDL_RenderClear(renderer);
+    while (true)
+    {
+        while (SDL_PollEvent(&event))
+        {
+            if (event.type == SDL_EVENT_QUIT)
+                goto quit;
 
-        if (SDL_JoystickOpen(js) == NULL ) break;
-        SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, SDL_ALPHA_OPAQUE);
+            if (event.type == SDL_EVENT_KEY_DOWN &&
+                event.key.key == SDLK_ESCAPE)
+                goto quit;
 
-        if (kb) SDLTest_DrawString(renderer, pos(size, "Keyboard"), 0x23, "Keyboard");
-        else {
-           strncpy (joy, SDL_JoystickNameForIndex(js), s);
-           joy[s] = '\0';
-           SDLTest_DrawString(renderer, pos(size, joy), 0x23, joy);
+            render_mapper(renderer, st, SCREEN_W, VERSION, event);
         }
 
-        SDL_WaitEvent(&event);
-        if (event.type == SDL_QUIT) {
-            break;
-        } else if (event.type == SDL_KEYDOWN) {
-            if (event.key.keysym.sym == SDLK_ESCAPE)
-                break;
-	}
-
-        for (int i=0; i < SDL_NumJoysticks(); i++) {
-
-          joystick = SDL_JoystickOpen(i);
-          if (joystick == NULL) break;
-          index = event.jaxis.which * offset;
-
-          if (event.type == SDL_JOYAXISMOTION && event.jaxis.which == i) {
-
-            js = i;
-            kb = 0;
-
-            if (event.jaxis.axis > 0x63) { // 3 digit input codes
-               index = index * offset;
-               snprintf (axis, sizeof(axis), "Axis:%04i %i", event.jaxis.axis + 1 + index, event.jaxis.value);
-               if (abs(event.jaxis.value) > JITTER) {
-                  if (event.jaxis.value < 0) snprintf (example, sizeof(example), "%s -%04i", ega, event.jaxis.axis + 1 + index);
-                  else snprintf (example, sizeof(example), "%s +%04i", ega, event.jaxis.axis + 1 + index);
-               }
-            }
-            else
-            {
-               snprintf (axis, sizeof(axis), "Axis:%03i %i", event.jaxis.axis + 1 + index, event.jaxis.value);
-               if (abs(event.jaxis.value) > JITTER) {
-                  if (event.jaxis.value < 0) snprintf (example, sizeof(example), "%s -%03i", ega, event.jaxis.axis + 1 + index);
-                  else snprintf (example, sizeof(example), "%s +%03i", ega, event.jaxis.axis + 1 + index);
-               }
-            }
-
-            SDLTest_DrawString(renderer, pos(size, axis), ln, axis);
-
-          } else if (event.type == SDL_JOYBUTTONDOWN && event.jbutton.which == i) {
-
-            js = i;
-            kb = 0;
-
-            if (event.jbutton.button > 0x63) { // 3 digit input codes
-               index = index * offset;
-               snprintf (button, sizeof(button), "Button: %04i", event.jbutton.button + 1 + index);
-               snprintf (example, sizeof(example), "%s %04i", egb, event.jbutton.button + 1 + index);
-            }
-            else
-            {
-               snprintf (button, sizeof(button), "Button: %03i", event.jbutton.button + 1 + index);
-               snprintf (example, sizeof(example), "%s %03i", egb, event.jbutton.button + 1 + index);
-            }
-
-            SDLTest_DrawString(renderer, pos(size, button), ln, button);
-
-          } else if (event.type == SDL_JOYHATMOTION && event.jhat.hat == i) {
-
-            js = event.jhat.which;
-            kb = 0;
-
-            snprintf (hat, sizeof(hat), "HAT:%03d %s", js * 100, sdl2_hat(event.jhat.value));
-            snprintf (example, sizeof(example), "KEY_UP Button: %03d", js * 100);
-
-            SDLTest_DrawString(renderer, pos(size, hat), ln, hat);
-
-          } else if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
-
-            kb = 1;
-
-            snprintf (key, sizeof(key), "Key: %s", sdl2_key(event.key.keysym.sym));
-            snprintf (example, sizeof(example), "%s %s 0 0", egk, sdl2_key(event.key.keysym.sym));
-
-            SDLTest_DrawString(renderer, pos(size, key), ln, key);
-          }
-       }
-
-       SDLTest_DrawString(renderer, pos(size, example), 0x78, example);
-       SDLTest_DrawString(renderer, 0x122, 0x9a, "ESC to quit");
-       SDLTest_DrawString(renderer, 0x006, 0x9a, VERSION);
-       SDL_RenderPresent(renderer);
+        SDL_Delay(1);
     }
 
-    SDL_JoystickClose(joystick);
+quit:
+
+    for (int i = 0; i < count; i++)
+        if (sticks[i])
+            SDL_CloseJoystick(sticks[i]);
+
+    SDL_free(sticks);
+    SDL_free(ids);
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
+
     return 0;
 }
+

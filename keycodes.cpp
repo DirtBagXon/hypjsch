@@ -20,11 +20,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <SDL2/SDL_keycode.h>
-#include <SDL2/SDL_joystick.h>
+#include <SDL3/SDL_keycode.h>
+#include <SDL3/SDL_joystick.h>
 #include <string>
 
-const char* sdl2_key(int key)
+const char* sdl3_key(int key)
 {
 	if (key == SDLK_BACKSPACE) return "SDLK_BACKSPACE";
 	else if (key == SDLK_TAB) return "SDLK_TAB";
@@ -32,7 +32,7 @@ const char* sdl2_key(int key)
 	else if (key == SDLK_ESCAPE) return "SDLK_ESCAPE";
 	else if (key == SDLK_SPACE) return "SDLK_SPACE";
 	else if (key == SDLK_HASH) return "SDLK_HASH";
-	else if (key == SDLK_QUOTE) return "SDLK_QUOTE";
+	else if (key == SDLK_APOSTROPHE) return "SDLK_QUOTE";
 	else if (key == SDLK_COMMA) return "SDLK_COMMA";
 	else if (key == SDLK_MINUS) return "SDLK_MINUS";
 	else if (key == SDLK_PERIOD) return "SDLK_PERIOD";
@@ -53,33 +53,33 @@ const char* sdl2_key(int key)
 	else if (key == SDLK_LEFTBRACKET) return "SDLK_LEFTBRACKET";
 	else if (key == SDLK_RIGHTBRACKET) return "SDLK_RIGHTBRACKET";
 	else if (key == SDLK_BACKSLASH) return "SDLK_BACKSLASH";
-	else if (key == SDLK_BACKQUOTE) return "SDLK_BACKQUOTE";
-	else if (key == SDLK_a) return "SDLK_a";
-	else if (key == SDLK_b) return "SDLK_b";
-	else if (key == SDLK_c) return "SDLK_c";
-	else if (key == SDLK_d) return "SDLK_d";
-	else if (key == SDLK_e) return "SDLK_e";
-	else if (key == SDLK_f) return "SDLK_f";
-	else if (key == SDLK_g) return "SDLK_g";
-	else if (key == SDLK_h) return "SDLK_h";
-	else if (key == SDLK_i) return "SDLK_i";
-	else if (key == SDLK_j) return "SDLK_j";
-	else if (key == SDLK_k) return "SDLK_k";
-	else if (key == SDLK_l) return "SDLK_l";
-	else if (key == SDLK_m) return "SDLK_m";
-	else if (key == SDLK_n) return "SDLK_n";
-	else if (key == SDLK_o) return "SDLK_o";
-	else if (key == SDLK_p) return "SDLK_p";
-	else if (key == SDLK_q) return "SDLK_q";
-	else if (key == SDLK_r) return "SDLK_r";
-	else if (key == SDLK_s) return "SDLK_s";
-	else if (key == SDLK_t) return "SDLK_t";
-	else if (key == SDLK_u) return "SDLK_u";
-	else if (key == SDLK_v) return "SDLK_v";
-	else if (key == SDLK_w) return "SDLK_w";
-	else if (key == SDLK_x) return "SDLK_x";
-	else if (key == SDLK_y) return "SDLK_y";
-	else if (key == SDLK_z) return "SDLK_z";
+	else if (key == SDLK_GRAVE) return "SDLK_BACKQUOTE";
+	else if (key == SDLK_A) return "SDLK_A";
+	else if (key == SDLK_B) return "SDLK_B";
+	else if (key == SDLK_C) return "SDLK_C";
+	else if (key == SDLK_D) return "SDLK_D";
+	else if (key == SDLK_E) return "SDLK_E";
+	else if (key == SDLK_F) return "SDLK_F";
+	else if (key == SDLK_G) return "SDLK_G";
+	else if (key == SDLK_H) return "SDLK_H";
+	else if (key == SDLK_I) return "SDLK_I";
+	else if (key == SDLK_J) return "SDLK_J";
+	else if (key == SDLK_K) return "SDLK_K";
+	else if (key == SDLK_L) return "SDLK_L";
+	else if (key == SDLK_M) return "SDLK_M";
+	else if (key == SDLK_N) return "SDLK_N";
+	else if (key == SDLK_O) return "SDLK_O";
+	else if (key == SDLK_P) return "SDLK_P";
+	else if (key == SDLK_Q) return "SDLK_Q";
+	else if (key == SDLK_R) return "SDLK_R";
+	else if (key == SDLK_S) return "SDLK_S";
+	else if (key == SDLK_T) return "SDLK_T";
+	else if (key == SDLK_U) return "SDLK_U";
+	else if (key == SDLK_V) return "SDLK_V";
+	else if (key == SDLK_W) return "SDLK_W";
+	else if (key == SDLK_X) return "SDLK_X";
+	else if (key == SDLK_Y) return "SDLK_Y";
+	else if (key == SDLK_Z) return "SDLK_Z";
 	else if (key == SDLK_CAPSLOCK) return "SDLK_CAPSLOCK";
 	else if (key == SDLK_DELETE) return "SDLK_DELETE";
 	else if (key == SDLK_F1) return "SDLK_F1";
@@ -140,7 +140,7 @@ const char* sdl2_key(int key)
 	}
 }
 
-const char* sdl2_hat(int key)
+const char* sdl3_hat(int key)
 {
 	if (key == SDL_HAT_CENTERED) return "SDL_HAT_CENTERED";
 	else if (key == SDL_HAT_UP) return "SDL_HAT_UP";

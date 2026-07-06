@@ -20,13 +20,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#define VERSION "v1.21"
-#define JITTER   0x7400
+#define VERSION "v2.00"
+#define JITTER   0x4400
 
 #ifndef keycodes_h
 #define keycodes_h
 
-const char* sdl2_key(int key);
-const char* sdl2_hat(int key);
+const char* sdl3_key(int key);
+const char* sdl3_hat(int key);
 
 #endif
