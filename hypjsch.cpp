@@ -238,6 +238,8 @@ int main(int argc, char* argv[])
         return 1;
     }
 
+    SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+
     SDL_Joystick** sticks =
         (SDL_Joystick**)SDL_calloc(count, sizeof(SDL_Joystick*));
 

@@ -5,9 +5,8 @@ CLI = hypjsch_cli
 RM  = rm -f 
 
 CPP = g++
-CFLAGS =
+CFLAGS := $(shell pkg-config --cflags sdl3)
 LIBS := $(shell pkg-config --libs sdl3)
-TESTLIBS = -lSDL3_test
 
 all:	$(GUI) $(CLI)
 
@@ -15,7 +14,7 @@ clean:
 	$(RM) $(GUI) $(CLI)
 
 $(GUI): hypjsch.cpp keycodes.cpp
-	${CPP} ${CFLAGS} keycodes.cpp hypjsch.cpp ${TESTLIBS} ${LIBS} -o ${GUI}
+	${CPP} ${CFLAGS} keycodes.cpp hypjsch.cpp ${LIBS} -o ${GUI}
 
 $(CLI): hypjsch_cli.cpp
 	${CPP} ${CFLAGS} hypjsch_cli.cpp ${LIBS} -o ${CLI}
